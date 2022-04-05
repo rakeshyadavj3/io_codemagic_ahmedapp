@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1033037829777",
+    "project_id": "io-codemagic-ahmedapp",
+    "storage_bucket": "io-codemagic-ahmedapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1033037829777:android:98359919d7630e78bf1130",
+        "android_client_info": {
+          "package_name": "com.example.io_codemagic_ahmedapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1033037829777-05apkm1i7tpnv0dloaphd8f19n3ito0b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCMDIOKXKF39DbA6mICWv142vSuhgLy0lE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1033037829777-05apkm1i7tpnv0dloaphd8f19n3ito0b.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
