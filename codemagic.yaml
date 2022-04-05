@@ -1,5 +1,70 @@
 workflows:
-  hello-world:
-    name: Hello world workflow
+  android-workflow:
+    name: Android Workflow
+    max_build_duration: 120
+    environment:
+      groups:
+        # Add the group environment variables in Codemagic UI (either in Application/Team variables) - https://docs.codemagic.io/variables/environment-variable-groups/
+        - keystore_credentials # <-- (Includes FCI_KEYSTORE, FCI_KEYSTORE_PASSWORD, FCI_KEY_PASSWORD, FCI_KEY_ALIAS)
+          # FCI_KEYSTORE <-- Put your keystore file here
+          # FCI_KEYSTORE_PASSWORD <-- Put your keystore password here
+          # FCI_KEY_PASSWORD <-- Put your keystore alias password here
+        # FCI_KEY_ALIAS <-- Put your keystore alias username here
+        - google_play # <-- (Includes GCLOUD_SERVICE_ACCOUNT_CREDENTIALS <-- Put CONTENTS of your Gloud crendentials file here)
+        - firebase_token # <-- (Includes ANDROID_FIREBASE_SECRET)
+        - other
+      vars:
+        FCI_KEYSTORE_PATH: /tmp/keystore.keystore
+      flutter: stable
+      xcode: latest
+      cocoapods: default
     scripts:
-      - echo "Hello World!"
+      - name: Set up key properties
+        script: |
+          echo $FCI_KEYSTORE | base64 --decode > /tmp/keystore.keystore
+          # The following script creates key.properties file and stores the credentials in it. As we configure code signing in app/build.gradle file, the following part is unnecessary unless code signing is configured differently as explained in the documentation: https://docs.codemagic.io/flutter-code-signing/android-code-signing/
+          # cat >> "$FCI_BUILD_DIR/android/key.properties" <<EOF
+          # storePassword=$FCI_KEYSTORE_PASSWORD
+          # keyPassword=$FCI_KEY_PASSWORD
+          # keyAlias=$FCI_KEY_ALIAS
+          # storeFile=/tmp/keystore.keystore
+          # EOF
+      - name: Set up local.properties
+        script: |
+          echo "flutter.sdk=$HOME/programs/flutter" > "$FCI_BUILD_DIR/android/local.properties"
+      - name: Get Flutter packages
+        script: |
+          cd . && flutter packages pub get
+      - name: Flutter analyze
+        script: |
+          cd . && flutter analyze
+      - name: Flutter unit tests
+        script: |
+          cd . && flutter test
+        ignore_failure: true
+      - name: Install pods
+        script: |
+          find . -name "Podfile" -execdir pod install \;
+      - name: Build APK with Flutter
+        script: |
+          cd . && flutter build apk --release --build-name=1.0.0 --build-number=$(($(google-play get-latest-build-number --package-name "$PACKAGE_NAME") + 1))
+    artifacts:
+      - build/**/outputs/**/*.apk
+      - build/**/outputs/**/*.aab
+      - build/**/outputs/**/mapping.txt
+      - flutter_drive.log
+    publishing:
+      email:
+        recipients:
+          - kevin@nevercode.io
+          - medoleader91@gmail.com
+        notify:
+          success: true
+          failure: false
+      firebase:
+        firebase_token: 1//03q1CL34HYY_0CgYIARAAGAMSNwF-L9Irloyj2pDB3M9X91wZw5GycgCZmbIQQgrOnIKXIc5MgKy4rVljulTGgWytSVTgUkAgtYc
+        android:
+          app_id: 1:1033037829777:android:98359919d7630e78bf1130
+          groups:
+            - androidTesters
+
