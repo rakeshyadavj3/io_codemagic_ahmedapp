@@ -10,28 +10,13 @@ workflows:
           # FCI_KEYSTORE_PASSWORD <-- Put your keystore password here
           # FCI_KEY_PASSWORD <-- Put your keystore alias password here
         # FCI_KEY_ALIAS <-- Put your keystore alias username here
-        - google_play # <-- (Includes GCLOUD_SERVICE_ACCOUNT_CREDENTIALS <-- Put CONTENTS of your Gloud crendentials file here)
+        # google_play # <-- (Includes GCLOUD_SERVICE_ACCOUNT_CREDENTIALS <-- Put CONTENTS of your Gloud crendentials file here)
         - firebase_token # <-- (Includes ANDROID_FIREBASE_SECRET)
         - other
       vars:
         FCI_KEYSTORE_PATH: /tmp/keystore.keystore
       flutter: stable
-      xcode: latest
-      cocoapods: default
     scripts:
-      - name: Set up key properties
-        script: |
-          echo $FCI_KEYSTORE | base64 --decode > /tmp/keystore.keystore
-          # The following script creates key.properties file and stores the credentials in it. As we configure code signing in app/build.gradle file, the following part is unnecessary unless code signing is configured differently as explained in the documentation: https://docs.codemagic.io/flutter-code-signing/android-code-signing/
-          # cat >> "$FCI_BUILD_DIR/android/key.properties" <<EOF
-          # storePassword=$FCI_KEYSTORE_PASSWORD
-          # keyPassword=$FCI_KEY_PASSWORD
-          # keyAlias=$FCI_KEY_ALIAS
-          # storeFile=/tmp/keystore.keystore
-          # EOF
-      - name: Set up local.properties
-        script: |
-          echo "flutter.sdk=$HOME/programs/flutter" > "$FCI_BUILD_DIR/android/local.properties"
       - name: Get Flutter packages
         script: |
           cd . && flutter packages pub get
@@ -42,9 +27,6 @@ workflows:
         script: |
           cd . && flutter test
         ignore_failure: true
-      - name: Install pods
-        script: |
-          find . -name "Podfile" -execdir pod install \;
       - name: Build APK with Flutter
         script: |
           cd . && flutter build apk --release --build-name=1.0.0 --build-number=$(($(google-play get-latest-build-number --package-name "$PACKAGE_NAME") + 1))
