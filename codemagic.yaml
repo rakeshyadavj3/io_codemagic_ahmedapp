@@ -33,7 +33,7 @@ workflows:
               cd android && ./gradlew assembleRelease
       - name: Build APK with Flutter
         script: |
-          cd . && flutter build apk --release --build-name=1.0.0 --build-number=$(($(google-play get-latest-build-number --package-name "$PACKAGE_NAME") + 1))
+          cd . && flutter build apk --release --build-name=1.0.5 --build-number=$(($(google-play get-latest-build-number --package-name "$PACKAGE_NAME")))
     artifacts:
       - build/**/outputs/**/*.apk
       - build/**/outputs/**/*.aab
