@@ -1,17 +1,12 @@
 workflows:
   android-workflow:
     name: Android Workflow
+    instance_type: linux
     max_build_duration: 120
     environment:
       groups:
-        # Add the group environment variables in Codemagic UI (either in Application/Team variables) - https://docs.codemagic.io/variables/environment-variable-groups/
-        - keystore_credentials # <-- (Includes FCI_KEYSTORE, FCI_KEYSTORE_PASSWORD, FCI_KEY_PASSWORD, FCI_KEY_ALIAS)
-          # FCI_KEYSTORE <-- Put your keystore file here
-          # FCI_KEYSTORE_PASSWORD <-- Put your keystore password here
-        # FCI_KEY_PASSWORD <-- Put your keystore alias password here
-        # FCI_KEY_ALIAS <-- Put your keystore alias username here
-        # google_play # <-- (Includes GCLOUD_SERVICE_ACCOUNT_CREDENTIALS <-- Put CONTENTS of your Gloud crendentials file here)
-        - FIREBASE_TOKEN # <-- (Includes ANDROID_FIREBASE_SECRET)
+        - keystore_credentials
+        - FIREBASE_TOKEN
         - other
       vars:
         FCI_KEYSTORE_PATH: /tmp/keystore.keystore
@@ -29,9 +24,6 @@ workflows:
           cd . && flutter build apk --release --build-name=1.0.5 --build-number=$(($(google-play get-latest-build-number --package-name "$PACKAGE_NAME")))
     artifacts:
       - build/**/outputs/**/*.apk
-      - build/**/outputs/**/*.aab
-      - build/**/outputs/**/mapping.txt
-      - flutter_drive.log
     publishing:
       email:
         recipients:
