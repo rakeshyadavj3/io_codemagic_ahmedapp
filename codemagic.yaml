@@ -15,11 +15,9 @@ workflows:
       - name: Get Flutter packages
         script: |
           cd . && flutter packages pub get
-      - name: Build Android
+      - name: android signing
         script: |
               echo $CM_KEYSTORE | base64 --decode > $CM_KEYSTORE_PATH
-              cd . && flutter clean
-              cd android && bash ./gradlew assembleRelease
       - name: Build APK with Flutter
         script: |
           cd . && flutter build apk --release --build-name=1.0.5 --build-number=$(($(google-play get-latest-build-number --package-name "$PACKAGE_NAME")))
