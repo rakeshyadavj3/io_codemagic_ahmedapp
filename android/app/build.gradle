@@ -61,7 +61,7 @@ android {
             } else {
                 storeFile file("../app/upload-keystore.jks")
                 storePassword ":G%5]cTUCj;7eB%!"
-                keyAlias "MyReleaseKey"
+                keyAlias "upload"
                 keyPassword ":G%5]cTUCj;7eB%!"
             }
         }
