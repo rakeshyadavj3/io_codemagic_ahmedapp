@@ -12,25 +12,22 @@ workflows:
       xcode: latest
       cocoapods: default
     scripts:
-      - |
-        # set up key.properties
-        echo $CM_KEYSTORE | base64 --decode > $CM_KEYSTORE_PATH
-        cat >> "$CM_BUILD_DIR/android/key.properties" <<EOF
-        storePassword=$CM_KEYSTORE_PASSWORD
-        keyPassword=$CM_KEY_PASSWORD
-        keyAlias=$CM_KEY_ALIAS
-        storeFile=/tmp/keystore.keystore
-        EOF
-        - |
-        # set up local properties
-        echo "flutter.sdk=$HOME/programs/flutter" > "$CM_BUILD_DIR/android/local.properties"
-        - flutter packages pub get
-        - flutter build apk --release
+      - name: Get Flutter packages
+        script: |
+          cd . && flutter packages pub get
+      - name: Build Android
+        script: |
+              echo $CM_KEYSTORE | base64 --decode > $CM_KEYSTORE_PATH
+              cd android && bash ./gradlew assembleRelease
+      - name: Build APK with Flutter
+        script: |
+          cd . && flutter build apk --release
     artifacts:
       - build/**/outputs/**/*.apk
     publishing:
       email:
         recipients:
+          - kevin@nevercode.io
           - medoleader91@gmail.com
         notify:
           success: true
