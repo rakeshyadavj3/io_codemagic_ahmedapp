@@ -18,7 +18,9 @@ workflows:
       - name: Build Android
         script: |
               echo $CM_KEYSTORE | base64 --decode > $CM_KEYSTORE_PATH
-              cd android && bash ./gradlew assembleRelease
+              flutter clean
+              flutter pub get
+              flutter build apk
       - name: Build APK with Flutter
         script: |
           cd . && flutter build apk --release
