@@ -30,7 +30,6 @@ workflows:
       - name: set up local properties
         script: |
           echo "flutter.sdk=$HOME/programs/flutter" > "$FCI_BUILD_DIR/android/local.properties"
-          echo $FCI_KEYSTORE | base64 --decode > $FCI_KEYSTORE_PATH
           flutter packages pub get
           flutter build apk --release
       - name: Get Flutter packages
