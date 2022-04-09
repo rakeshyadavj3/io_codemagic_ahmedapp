@@ -27,7 +27,7 @@ workflows:
         # set up local properties
         echo "flutter.sdk=$HOME/programs/flutter" > "$FCI_BUILD_DIR/android/local.properties"
       - flutter packages pub get
-      - flutter build apk --release
+      - flutter build apk --release --stacktrace
     artifacts:
       - build/**/outputs/apk/**/*.apk
     publishing:
