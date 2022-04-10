@@ -15,9 +15,19 @@ workflows:
       - name: Get Flutter packages
         script: |
           cd . && flutter packages pub get
+      - name: Set up debug key.properties
+        script: |
+          keytool -genkeypair \
+            -alias androiddebugkey \
+            -keypass android \
+            -keystore ~/.android/debug.keystore \
+            -storepass android \
+            -dname 'CN=Android Debug,O=Android,C=US' \
+            -keyalg 'RSA' \
+            -keysize 2048 \
+            -validity 10000
       - name: Build APK with Flutter
         script: |
-          echo $CM_KEYSTORE | base64 --decode > $CM_KEYSTORE_PATH
           cd . && flutter build apk --release --build-name=1.0.5
     artifacts:
       - build/**/outputs/**/*.apk
