@@ -60,9 +60,9 @@ android {
                 keyPassword System.getenv()["CM_KEY_PASSWORD"]
             } else {
                 storeFile file("../app/upload-keystore.jks")
-                storePassword ":G%5]cTUCj;7eB%!"
-                keyAlias "upload"
-                keyPassword ":G%5]cTUCj;7eB%!"
+                storePassword "storePassword"
+                keyAlias "keyAlias"
+                keyPassword "keyPassword"
             }
         }
     }
