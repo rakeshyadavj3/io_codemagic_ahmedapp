@@ -12,23 +12,12 @@ workflows:
         - other
       flutter: stable
     scripts:
-      - name: Set up key.properties
-        script: |
-          echo $CM_KEYSTORE | base64 --decode > $CM_KEYSTORE_PATH
-          cat >> "$CM_BUILD_DIR/project_directory/android/key.properties" <<EOF
-          storePassword=$CM_KEYSTORE_PASSWORD
-          keyPassword=$CM_KEY_PASSWORD
-          keyAlias=$CM_KEY_ALIAS
-          storeFile=$CM_KEYSTORE_PATH
-          EOF
-      - name: Set up local.properties
-        script: |
-            echo "flutter.sdk=$HOME/programs/flutter" > "$CM_BUILD_DIR/android/local.properties"
       - name: Get Flutter packages
         script: |
           cd . && flutter packages pub get
       - name: Build APK with Flutter
         script: |
+          echo $CM_KEYSTORE | base64 --decode > $CM_KEYSTORE_PATH
           cd . && flutter build apk --release --build-name=1.0.5
     artifacts:
       - build/**/outputs/**/*.apk
