@@ -35,7 +35,7 @@ workflows:
       email:
         recipients:
           - kevin@nevercode.io
-          - medoleader91@gmail.com
+         # - medoleader91@gmail.com
         notify:
           success: true
           failure: false
