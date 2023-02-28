@@ -1,7 +1,7 @@
 workflows:
   android-workflow:
     name: Android Workflow
-    instance_type: mac_mini
+    instance_type: mac_mini_m1
     max_build_duration: 120
     environment:
       vars:
@@ -15,17 +15,17 @@ workflows:
       - name: Get Flutter packages
         script: |
           cd . && flutter packages pub get
-      - name: Set up debug key.properties
-        script: |
-          keytool -genkeypair \
-            -alias androiddebugkey \
-            -keypass android \
-            -keystore ~/.android/debug.keystore \
-            -storepass android \
-            -dname 'CN=Android Debug,O=Android,C=US' \
-            -keyalg 'RSA' \
-            -keysize 2048 \
-            -validity 10000
+      # - name: Set up debug key.properties
+      #   script: |
+      #     keytool -genkeypair \
+      #       -alias androiddebugkey \
+      #       -keypass android \
+      #       -keystore ~/.android/debug.keystore \
+      #       -storepass android \
+      #       -dname 'CN=Android Debug,O=Android,C=US' \
+      #       -keyalg 'RSA' \
+      #       -keysize 2048 \
+      #       -validity 10000
       - name: Build APK with Flutter
         script: |
           cd . && flutter build apk --debug --build-name=1.0.5
@@ -34,15 +34,15 @@ workflows:
     publishing:
       email:
         recipients:
-          - kevin@nevercode.io
+          - rakesh.junubala@gmail.com
          # - medoleader91@gmail.com
         notify:
           success: true
           failure: false
-      firebase:
-        firebase_token: $FIREBASE_TOKEN
-        android:
-          app_id: 1:1033037829777:android:98359919d7630e78bf1130
-          groups:
-            - androidTesters
+      # firebase:
+      #   firebase_token: $FIREBASE_TOKEN
+      #   android:
+      #     app_id: 1:1033037829777:android:98359919d7630e78bf1130
+      #     groups:
+      #       - androidTesters
 
